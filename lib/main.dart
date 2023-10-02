@@ -1,4 +1,6 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 void main() {
   runApp(const MyApp());
@@ -44,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
+    loadInfo();
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -53,7 +56,18 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+void loadInfo()async{
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  if(Platform.isAndroid){
+  AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+  print('Running on ${androidInfo.hardware} ${androidInfo.display}');  // e.g. "Moto G (4)"
+  }
 
+  if(Platform.isIOS){
+  IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+  print('Running on ${iosInfo.utsname.machine}');  // e.g. "iPod7,1"
+  }
+}
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
